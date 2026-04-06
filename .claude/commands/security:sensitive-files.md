@@ -13,7 +13,7 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 
 ### 1. リポジトリ一覧の取得
 
-!~/.local/bin/gh-wrapper.sh api orgs/{ORG_NAME}/repos --paginate --jq '.[].name'
+!gh api orgs/{ORG_NAME}/repos --paginate --jq '.[].name'
 
 ### 2. 各リポジトリのsensitive filesチェック
 
@@ -30,7 +30,7 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 - その他: `.htpasswd`, `.netrc`, `.npmrc`, `.pypirc`, `kubeconfig`
 
 各リポジトリに対して:
-!~/.local/bin/gh-wrapper.sh api "repos/{ORG_NAME}/{repo}/git/trees/HEAD?recursive=1" --jq '[.tree[].path]'
+!gh api "repos/{ORG_NAME}/{repo}/git/trees/HEAD?recursive=1" --jq '[.tree[].path]'
 
 ツリーから上記パターンにマッチするファイルを抽出してください。
 

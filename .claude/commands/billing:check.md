@@ -14,7 +14,7 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 ### 1. Usage Report の取得
 
 当月のbilling usageを取得してください。
-!~/.local/bin/gh-wrapper.sh api orgs/{ORG_NAME}/settings/billing/usage --jq '.usageItems[]'
+!gh api orgs/{ORG_NAME}/settings/billing/usage --jq '.usageItems[]'
 
 ### 2. アノマリー判定
 
@@ -34,10 +34,10 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 ### 3. Code Scanning default setup チェック
 
 全リポジトリのCode Scanning default setup状態を確認してください。
-!~/.local/bin/gh-wrapper.sh api orgs/{ORG_NAME}/repos --paginate --jq '.[].name'
+!gh api orgs/{ORG_NAME}/repos --paginate --jq '.[].name'
 
 各リポジトリに対して:
-!~/.local/bin/gh-wrapper.sh api repos/{ORG_NAME}/{repo}/code-scanning/default-setup --jq '{state}'
+!gh api repos/{ORG_NAME}/{repo}/code-scanning/default-setup --jq '{state}'
 
 レスポンスの解釈:
 - `state: configured` → Code Scanningが有効。GHAS課金リスクとして報告
@@ -46,7 +46,7 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 
 ### 4. Copilot 席数チェック
 
-!~/.local/bin/gh-wrapper.sh api orgs/{ORG_NAME}/copilot/billing --jq '{total_seats: .seat_breakdown.total, setting: .seat_management_setting}'
+!gh api orgs/{ORG_NAME}/copilot/billing --jq '{total_seats: .seat_breakdown.total, setting: .seat_management_setting}'
 
 `total_seats > 0` の場合、意図した利用か警告してください。
 
