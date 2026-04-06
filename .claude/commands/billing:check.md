@@ -33,16 +33,17 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 
 ### 3. Code Scanning default setup チェック
 
-全リポジトリのCode Scanning default setup状態を確認してください。
-!gh api orgs/{ORG_NAME}/repos --paginate --jq '.[].name'
+全リポジトリの名前とvisibilityを取得してください。
+!gh api orgs/{ORG_NAME}/repos --paginate --jq '.[] | {name, visibility}'
 
 各リポジトリに対して:
 !gh api repos/{ORG_NAME}/{repo}/code-scanning/default-setup --jq '{state}'
 
 レスポンスの解釈:
-- `state: configured` → Code Scanningが有効。GHAS課金リスクとして報告
-- `state: not-configured` → 無効。正常
-- 403 "Code Security must be enabled" → Code Security自体が無効（privateリポジトリ）。正常として扱う
+- `state: configured` + **public** → 正常（publicリポジトリのCode Scanning/Secret Scanningは無料）
+- `state: configured` + **private/internal** → アノマリー（GHAS課金が発生する）
+- `state: not-configured` → 正常
+- 403 "Code Security must be enabled" → Code Security自体が無効。正常
 
 ### 4. Copilot 席数チェック
 
