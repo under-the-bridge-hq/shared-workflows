@@ -1,0 +1,84 @@
+name: Sensitive Files Check
+
+on:
+  workflow_call:
+    inputs:
+      extra-patterns:
+        description: "追加のファイルパターン（カンマ区切り、例: '*.secret,config/prod.*'）"
+        type: string
+        default: ""
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for sensitive files
+        run: |
+          PATTERNS=(
+            # 秘密鍵・証明書
+            '*.pem'
+            '*.key'
+            '*.p12'
+            '*.pfx'
+            '*.jks'
+            '*.keystore'
+            # 環境変数・設定
+            '.env'
+            '.env.*'
+            '*.env'
+            # 認証情報
+            'credentials.json'
+            'service-account*.json'
+            '*-credentials.json'
+            '*.credential'
+            # SSH
+            'id_rsa'
+            'id_ed25519'
+            'id_ecdsa'
+            '*.pub'
+            # AWS
+            '.aws/credentials'
+            '.aws/config'
+            # GCP
+            '*-sa-key.json'
+            # Terraform
+            '*.tfvars'
+            'terraform.tfstate'
+            'terraform.tfstate.backup'
+            # その他
+            '.htpasswd'
+            '.netrc'
+            '.npmrc'
+            '.pypirc'
+            'kubeconfig'
+            '*.kube/config'
+          )
+
+          # 追加パターン
+          if [ -n "${{ inputs.extra-patterns }}" ]; then
+            IFS=',' read -ra EXTRA <<< "${{ inputs.extra-patterns }}"
+            PATTERNS+=("${EXTRA[@]}")
+          fi
+
+          FOUND=0
+          for pattern in "${PATTERNS[@]}"; do
+            # .gitignoreで無視されていないファイルのみチェック
+            matches=$(git ls-files "$pattern" 2>/dev/null)
+            if [ -n "$matches" ]; then
+              echo "::warning::Sensitive file pattern '$pattern' found:"
+              echo "$matches" | while read -r f; do
+                echo "  - $f"
+              done
+              FOUND=1
+            fi
+          done
+
+          if [ "$FOUND" -eq 1 ]; then
+            echo ""
+            echo "::error::Sensitive files detected in repository. Review the warnings above."
+            exit 1
+          else
+            echo "No sensitive files detected."
+          fi
