@@ -1,7 +1,5 @@
 ---
 description: GHEC billing のアノマリー検出。通常のライセンス費用以外の予期しない課金を検出します。
-allowed-tools:
-  - Bash(~/.local/bin/gh-wrapper.sh:*)
 ---
 # GHEC Billing アノマリー検出
 

@@ -1,7 +1,5 @@
 ---
 description: Organization内のリポジトリにsensitive files（秘密鍵、.env、credentials等）がpushされていないかチェックします。
-allowed-tools:
-  - Bash(~/.local/bin/gh-wrapper.sh:*)
 ---
 # Sensitive Files チェック
 
