@@ -24,7 +24,7 @@ jobs:
             '*.pfx'
             '*.jks'
             '*.keystore'
-            # 環境変数・設定
+            # 環境変数・設定（.env.example, .env.sample, .env.template は後で除外）
             '.env'
             '.env.*'
             '*.env'
@@ -62,16 +62,35 @@ jobs:
             PATTERNS+=("${EXTRA[@]}")
           fi
 
+          # 除外パターン（誤検知防止）
+          EXCLUDES=(
+            '.env.example'
+            '.env.sample'
+            '.env.template'
+          )
+
+          is_excluded() {
+            local file="$1"
+            local basename="${file##*/}"
+            for exc in "${EXCLUDES[@]}"; do
+              if [[ "$basename" == "$exc" ]]; then
+                return 0
+              fi
+            done
+            return 1
+          }
+
           FOUND=0
           for pattern in "${PATTERNS[@]}"; do
             # .gitignoreで無視されていないファイルのみチェック
             matches=$(git ls-files "$pattern" 2>/dev/null)
             if [ -n "$matches" ]; then
-              echo "::warning::Sensitive file pattern '$pattern' found:"
-              echo "$matches" | while read -r f; do
-                echo "  - $f"
-              done
-              FOUND=1
+              while read -r f; do
+                if ! is_excluded "$f"; then
+                  echo "::warning::Sensitive file pattern '$pattern' found: $f"
+                  FOUND=1
+                fi
+              done <<< "$matches"
             fi
           done
 

@@ -22,12 +22,16 @@ ORG_NAMEが空の場合はユーザーにOrganization名を確認してくださ
 
 チェック対象パターン:
 - 秘密鍵・証明書: `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.jks`
-- 環境変数: `.env`, `.env.*`, `*.env`
+- 環境変数: `.env`, `.env.local`, `.env.production` 等（ただし `.env.example`, `.env.sample`, `.env.template` は除外）
 - 認証情報: `credentials.json`, `service-account*.json`
 - SSH鍵: `id_rsa`, `id_ed25519`
 - AWS: `.aws/credentials`
 - Terraform state: `*.tfstate`, `*.tfvars`
-- その他: `.htpasswd`, `.netrc`, `.npmrc`, `.pypirc`, `kubeconfig`
+- その他: `.htpasswd`, `.netrc`, `.pypirc`, `kubeconfig`
+
+除外パターン（誤検知防止）:
+- `.env.example`, `.env.sample`, `.env.template` — テンプレートファイル（実値を含まない）
+- `.npmrc` — `ignore-scripts=true`等のセキュリティ設定のみの場合が多い。検出した場合は中身を確認して判断
 
 各リポジトリに対して:
 !gh api "repos/{ORG_NAME}/{repo}/git/trees/HEAD?recursive=1" --jq '[.tree[].path]'
