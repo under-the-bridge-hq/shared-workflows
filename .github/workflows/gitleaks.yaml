@@ -7,10 +7,6 @@ on:
         description: "スキャンモード: 'protect'(差分のみ) or 'detect'(全履歴)"
         type: string
         default: "protect"
-      config-path:
-        description: "カスタム設定ファイルパス（省略時はデフォルト設定）"
-        type: string
-        default: ""
 
 jobs:
   gitleaks:
@@ -25,7 +21,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-        with:
-          args: >-
-            ${{ inputs.scan-mode == 'detect' && '--no-git' || '' }}
-            ${{ inputs.config-path != '' && format('--config={0}', inputs.config-path) || '' }}
