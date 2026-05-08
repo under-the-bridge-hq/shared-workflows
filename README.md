@@ -46,3 +46,9 @@ jobs:
 |---|---|
 | `/billing:check <org>` | GHEC billingのアノマリー検出 |
 | `/security:sensitive-files <org>` | Organization横断のsensitive filesチェック |
+| `/handoff:create [path]` | AIエージェント間のハンドオフドキュメントを作成 |
+| `/handoff:quick [path]` | 必要最小限のハンドオフを作成 |
+| `/handoff:resume [path]` | ハンドオフドキュメントから作業を再開 |
+
+`/handoff:*` は [willseltzer/claude-handoff](https://github.com/willseltzer/claude-handoff) を参考に、
+任意のAIコーディングエージェント（Claude Code, Cursor, Copilot, Aider等）間でコンテキストを引き継ぐためのスキル。
