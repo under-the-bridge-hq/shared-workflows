@@ -1,0 +1,11 @@
+{
+  "name": "billing",
+  "description": "GHEC billing のアノマリー検出。通常のライセンス費用以外の予期しない課金を検出します。",
+  "version": "0.1.0",
+  "author": {
+    "name": "under-the-bridge-hq"
+  },
+  "homepage": "https://github.com/under-the-bridge-hq/shared-workflows",
+  "repository": "https://github.com/under-the-bridge-hq/shared-workflows",
+  "license": "MIT"
+}

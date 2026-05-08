@@ -1,0 +1,11 @@
+{
+  "name": "security",
+  "description": "Organization 横断のセキュリティチェック（sensitive files が誤って push されていないかなど）。",
+  "version": "0.1.0",
+  "author": {
+    "name": "under-the-bridge-hq"
+  },
+  "homepage": "https://github.com/under-the-bridge-hq/shared-workflows",
+  "repository": "https://github.com/under-the-bridge-hq/shared-workflows",
+  "license": "MIT"
+}

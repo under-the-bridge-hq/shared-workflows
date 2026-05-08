@@ -38,17 +38,63 @@ jobs:
 |---|---|---|
 | `extra-patterns` | `""` | 追加のファイルパターン（カンマ区切り） |
 
-## Claude Code スキル
+## Claude Code プラグイン
 
-`.claude/commands/` 配下のスキルは、各リポジトリにコピーまたはsymlinkして使用。
+Claude Code Plugin Marketplace としてプラグインを配布しています。
+利用側は以下のコマンドで marketplace を追加し、必要なプラグインを個別に install してください。
 
-| スキル | 説明 |
-|---|---|
-| `/billing:check <org>` | GHEC billingのアノマリー検出 |
-| `/security:sensitive-files <org>` | Organization横断のsensitive filesチェック |
-| `/handoff:create [path]` | AIエージェント間のハンドオフドキュメントを作成 |
-| `/handoff:quick [path]` | 必要最小限のハンドオフを作成 |
-| `/handoff:resume [path]` | ハンドオフドキュメントから作業を再開 |
+### インストール
+
+Claude Code 内で実行:
+
+```
+/plugin marketplace add under-the-bridge-hq/shared-workflows
+/plugin install handoff@shared-workflows
+/plugin install billing@shared-workflows
+/plugin install security@shared-workflows
+```
+
+更新時:
+
+```
+/plugin marketplace update shared-workflows
+```
+
+### 提供プラグインとスキル
+
+| プラグイン | スキル | 説明 |
+|---|---|---|
+| `handoff` | `/handoff:create [path]` | AIエージェント間のハンドオフドキュメントを作成 |
+| `handoff` | `/handoff:quick [path]` | 必要最小限のハンドオフを作成 |
+| `handoff` | `/handoff:resume [path]` | ハンドオフドキュメントから作業を再開 |
+| `billing` | `/billing:check <org>` | GHEC billing のアノマリー検出 |
+| `security` | `/security:sensitive-files <org>` | Organization 横断の sensitive files チェック |
 
 `/handoff:*` は [willseltzer/claude-handoff](https://github.com/willseltzer/claude-handoff) を参考に、
 任意のAIコーディングエージェント（Claude Code, Cursor, Copilot, Aider等）間でコンテキストを引き継ぐためのスキル。
+
+### ローカル開発
+
+このリポジトリ内でプラグインを試す場合は `--plugin-dir` を使用:
+
+```bash
+claude --plugin-dir ./plugins/handoff
+claude --plugin-dir ./plugins/billing --plugin-dir ./plugins/security
+```
+
+### ディレクトリ構成
+
+```
+.claude-plugin/
+└── marketplace.json          # マーケットプレイスカタログ
+plugins/
+├── handoff/
+│   ├── .claude-plugin/plugin.json
+│   └── skills/{create,quick,resume}/SKILL.md
+├── billing/
+│   ├── .claude-plugin/plugin.json
+│   └── skills/check/SKILL.md
+└── security/
+    ├── .claude-plugin/plugin.json
+    └── skills/sensitive-files/SKILL.md
+```
