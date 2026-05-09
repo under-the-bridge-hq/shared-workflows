@@ -4,23 +4,22 @@
     "name": "under-the-bridge-hq"
   },
   "metadata": {
-    "description": "under-the-bridge-hq Organization 横断で使う Claude Code プラグイン集",
-    "pluginRoot": "./plugins"
+    "description": "under-the-bridge-hq Organization 横断で使う Claude Code プラグイン集"
   },
   "plugins": [
     {
       "name": "handoff",
-      "source": "handoff",
+      "source": "./plugins/handoff",
       "description": "AIコーディングエージェント間でコンテキストを引き継ぐためのhandoffドキュメント作成・再開スキル"
     },
     {
       "name": "billing",
-      "source": "billing",
+      "source": "./plugins/billing",
       "description": "GHEC billing のアノマリー検出（通常のライセンス費用以外の予期しない課金を検出）"
     },
     {
       "name": "security",
-      "source": "security",
+      "source": "./plugins/security",
       "description": "Organization 横断のセキュリティチェック（sensitive files 等）"
     }
   ]
